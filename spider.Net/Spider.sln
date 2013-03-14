@@ -1,0 +1,29 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spider", "Spider.csproj", "{03A441DE-6AD1-4380-BA0A-1EEDB9946932}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "XPCommonControls", "..\..\..\..\..\..\Program Files\steepvalley.net\XPCommonControls\SourceCode\CommonControls\XPCommonControls.vbproj", "{B141F452-B5DB-447E-A6C9-456FCA08400B}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{03A441DE-6AD1-4380-BA0A-1EEDB9946932}.Debug.ActiveCfg = Debug|.NET
+		{03A441DE-6AD1-4380-BA0A-1EEDB9946932}.Debug.Build.0 = Debug|.NET
+		{03A441DE-6AD1-4380-BA0A-1EEDB9946932}.Release.ActiveCfg = Release|.NET
+		{03A441DE-6AD1-4380-BA0A-1EEDB9946932}.Release.Build.0 = Release|.NET
+		{B141F452-B5DB-447E-A6C9-456FCA08400B}.Debug.ActiveCfg = Debug|.NET
+		{B141F452-B5DB-447E-A6C9-456FCA08400B}.Debug.Build.0 = Debug|.NET
+		{B141F452-B5DB-447E-A6C9-456FCA08400B}.Release.ActiveCfg = Release|.NET
+		{B141F452-B5DB-447E-A6C9-456FCA08400B}.Release.Build.0 = Release|.NET
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal
