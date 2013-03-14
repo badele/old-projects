@@ -1,0 +1,123 @@
+This file contains any messages produced by compilers while
+running configure, to aid debugging if configure makes a mistake.
+
+configure:615: checking host system type
+configure:636: checking target system type
+configure:654: checking build system type
+configure:713: checking for a BSD compatible install
+configure:770: checking for -p flag to install
+configure:793: checking whether build environment is sane
+configure:831: checking whether make sets ${MAKE}
+configure:877: checking for working aclocal
+configure:890: checking for working autoconf
+configure:903: checking for working automake
+configure:916: checking for working autoheader
+configure:929: checking for working makeinfo
+configure:1015: checking for a C-Compiler
+configure:1021: checking for gcc
+configure:1127: checking whether the C compiler (gcc  ) works
+configure:1143: gcc -o conftest    conftest.c  1>&5
+configure:1169: checking whether the C compiler (gcc  ) is a cross-compiler
+configure:1174: checking whether we are using GNU C
+configure:1285: checking how to run the C preprocessor
+configure:1347: checking for a C++-Compiler
+configure:1353: checking for g++
+configure:1469: checking whether the C++ compiler (g++ -O0 -g3 -Wall ) works
+configure:1490: rm -rf SunWS_cache; g++ -o conftest -O0 -g3 -Wall   conftest.C  1>&5
+configure:1516: checking whether the C++ compiler (g++ -O0 -g3 -Wall ) is a cross-compiler
+configure:1521: checking whether we are using GNU C++
+configure:1605: checking whether g++ supports -fno-exceptions
+configure:1639: checking whether g++ supports -fno-check-new
+configure:1678: checking whether g++ supports -Wno-long-long
+configure:1710: checking whether g++ supports -fno-builtin
+configure:1755: checking whether g++ supports -fexceptions
+configure:1790: checking whether g++ supports -frtti
+configure:1870: checking how to run the C++ preprocessor
+configure:1953: checking whether g++ supports -frepo
+configure:2148: checking for ld used by GCC
+configure:2216: checking if the linker (/usr/bin/ld) is GNU ld
+configure:2233: checking for /usr/bin/ld option to reload object files
+configure:2245: checking for BSD-compatible nm
+configure:2282: checking whether ln -s works
+configure:2303: checking how to recognise dependant libraries
+configure:2589: checking for ranlib
+configure:2656: checking for strip
+configure:2828: checking for Cygwin environment
+configure:2861: checking for mingw32 environment
+ltconfig:670:checking for gcc option to produce PIC
+ltconfig:679:checking that gcc PIC flag  -fPIC -DPIC works.
+ltconfig:741: checking if gcc static flag -static works
+ltconfig:787: checking if gcc supports -c -o file.o
+ltconfig:788: gcc -c -O2 -o out/conftest2.o  conftest.c 1>&5
+ltconfig:841: checking if gcc supports -fno-rtti -fno-exceptions
+ltconfig:842: gcc -c -O2 -fno-rtti -fno-exceptions -c conftest.c  conftest.c 1>&5
+ltconfig:1309: checking if global_symbol_pipe works
+ltconfig:1310: gcc -c -O2  conftest.c 1>&5
+ltconfig:1313: eval "/usr/bin/nm -B conftest.o | sed -n -e 's/^.*[ 	]\([ABCDGISTW]\)[ 	][ 	]*\(\)\([_A-Za-z][_A-Za-z0-9]*\)$/\1 \2\3 \3/p' > conftest.nm"
+ltconfig:1365: gcc -o conftest -O2 -fno-builtin -fno-rtti -fno-exceptions   conftest.c conftstm.o 1>&5
+ltconfig:1706: checking for dlfcn.h
+ltconfig:1745: checking whether a program can dlopen itself
+ltconfig:1818: checking whether a statically linked program can dlopen itself
+g++ -E conftest.cc
+ltconfig:670:checking for g++ option to produce PIC
+ltconfig:679:checking that g++ PIC flag -fPIC -DPIC works.
+ltconfig:689: g++ -c -O2 -fno-exceptions -fno-check-new -Wall -pedantic -W -Wpointer-arith -Wmissing-prototypes -Wwrite-strings -Wno-long-long -fno-builtin -O0 -g3 -Wall -fPIC -DPIC -DPIC  conftest.cc 1>&5
+ltconfig:741: checking if g++ static flag -static works
+ltconfig:750: g++ -o conftest -O2 -fno-exceptions -fno-check-new -Wall -pedantic -W -Wpointer-arith -Wmissing-prototypes -Wwrite-strings -Wno-long-long -fno-builtin -O0 -g3 -Wall   -static conftest.cc  1>&5
+ltconfig:787: checking if g++ supports -c -o file.o
+ltconfig:788: g++ -c -O2 -fno-exceptions -fno-check-new -Wall -pedantic -W -Wpointer-arith -Wmissing-prototypes -Wwrite-strings -Wno-long-long -fno-builtin -O0 -g3 -Wall -o out/conftest2.o  conftest.cc 1>&5
+ltconfig:841: checking if g++ supports -fno-rtti -fno-exceptions
+ltconfig:842: g++ -c -O2 -fno-exceptions -fno-check-new -Wall -pedantic -W -Wpointer-arith -Wmissing-prototypes -Wwrite-strings -Wno-long-long -fno-builtin -O0 -g3 -Wall -fno-rtti -fno-exceptions -c conftest.cc  conftest.cc 1>&5
+ltconfig:1309: checking if global_symbol_pipe works
+ltconfig:1310: g++ -c -O2 -fno-exceptions -fno-check-new -Wall -pedantic -W -Wpointer-arith -Wmissing-prototypes -Wwrite-strings -Wno-long-long -fno-builtin -O0 -g3 -Wall  conftest.cc 1>&5
+ltconfig:1313: eval "/usr/bin/nm -B conftest.o | sed -n -e 's/^.*[ 	]\([ABCDGISTW]\)[ 	][ 	]*\(\)\([_A-Za-z][_A-Za-z0-9]*\)$/\1 \2\3 \3/p' > conftest.nm"
+ltconfig:1365: g++ -o conftest -O2 -fno-exceptions -fno-check-new -Wall -pedantic -W -Wpointer-arith -Wmissing-prototypes -Wwrite-strings -Wno-long-long -fno-builtin -O0 -g3 -Wall -fno-builtin -fno-rtti -fno-exceptions   conftest.cc conftstm.o 1>&5
+ltconfig:1706: checking for dlfcn.h
+ltconfig:1745: checking whether a program can dlopen itself
+ltconfig:1818: checking whether a statically linked program can dlopen itself
+configure:3009: checking for object suffix
+configure:3035: checking for executable suffix
+configure:3091: checking for msgfmt
+configure:3125: checking for gmsgfmt
+configure:3170: checking for xgettext
+configure:3223: checking for main in -lcompat
+configure:3260: checking for crypt in -lcrypt
+configure:3353: checking for the third argument of getsockname
+configure:3453: checking for dnet_ntoa in -ldnet
+configure:3494: checking for dnet_ntoa in -ldnet_stub
+configure:3535: checking for inet_ntoa
+configure:3625: checking for connect
+configure:3716: checking for remove
+configure:3808: checking for shmat
+configure:3902: checking for killpg in -lucb
+configure:3990: checking size of int
+configure:4029: checking size of long
+configure:4068: checking size of char *
+configure:4109: checking for dlopen in -ldl
+configure:4153: checking for shl_unload in -ldld
+configure:4200: checking for bool
+configure:4255: checking for extra includes
+configure:4286: checking for extra libs
+configure:4320: checking for libz
+configure:4376: checking for X
+configure:4662: checking for IceConnectionNumber in -lICE
+configure:4710: checking for libXext
+configure:4821: checking for libpng
+configure:4883: checking for libjpeg6b
+configure:4944: checking for libjpeg
+configure:5143: checking for Qt
+configure:5362: checking if Qt compiles without flags
+configure:5512: checking for moc
+configure:5577: checking for uic
+configure:5661: checking for rpath
+configure:5690: checking for KDE
+configure:5858: checking for KDE paths
+configure:6329: checking for dcopidl
+configure:6389: checking for dcopidl2cpp
+configure:6449: checking for mcopidl
+configure:6509: checking for kdb2html
+configure:6569: checking for artsc-config
+configure:6753: checking if doc should be compiled
+configure:6753: checking if kdoors should be compiled
+configure:6753: checking if kdoors-0.1 should be compiled
+configure:6753: checking if po should be compiled

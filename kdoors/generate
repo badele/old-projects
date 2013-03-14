@@ -1,0 +1,4 @@
+#!/bin/bash
+
+uic -o ../kdoors/$1.h $1.ui
+uic -i ../kdoors/$1.h -o ../kdoors/$1.cpp $1.ui

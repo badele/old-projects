@@ -1,0 +1,78 @@
+#!/bin/bash
+
+function GetInfo
+{
+    echo "<Plugins"
+    echo "  Author = \"Bruno Adele\""
+    echo "  Email = \"b_adele@netcourrier.com\""
+    echo "  Title = \"Check Url\""
+    echo "  Version = \"1.0\""
+    echo "  Type = \"Dianostic\""
+    echo "  Info = \"Teste si l'url est valide\""
+    echo "  Web = \"http://www.jesuislibre.org\""
+    echo "  Options =\"Server_Port=80 , Url=/iisadmin/\" "
+    echo "  Solution = \"\""
+    echo "/>"
+}
+
+
+function Start
+{
+   if [ "$1" == "getinfo" ] ; then
+        GetInfo
+    else 
+	InitParam $1 $2 $3
+	CheckParam
+	Execute
+	CleanResultat
+	ShowResultat
+    fi
+}
+
+function InitParam
+{
+    ADDRESSE=$1
+    PORT=$2
+    URL=$3
+}
+
+function CheckParam
+{
+    if [ "$PORT" == "" ] ; then
+        PORT="80"
+    fi
+}     
+
+function Execute
+{
+    TEST=`lynx http://$ADDRESSE:$PORT$URL --mime-header  | egrep '^HTTP/1.* 200 OK'`
+    if [ "$TEST" != "" ] ; then
+        RESULTAT="URL presente"
+    else
+        RESULTAT="URL non presente"
+    fi
+    
+
+}
+
+function CleanResultat
+{
+    RESULTAT=`echo $RESULTAT | sed -e "s/Server://"`
+}
+
+function ShowResultat
+{
+    if [ "$RESULTAT" != "" ]  ; then
+      echo "<Plugins"
+      echo "Resultat = \"$RESULTAT\""
+      echo "/>"
+    fi    
+}
+
+
+
+Start $1 $2 $3
+
+
+
+

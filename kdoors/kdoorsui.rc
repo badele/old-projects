@@ -1,0 +1,21 @@
+<!DOCTYPE kpartgui>
+<kpartgui name="kdoors" version="0.1">
+<MenuBar>
+  <Menu name="file"><text>&amp;File</text>
+    <Action name="file_new_window"/>
+  </Menu>
+  <Menu name="hosts"><text>&amp;Hostes</text>
+    <Action name="open_hosts"/>
+    <Action name="clear_hosts"/>
+    <Action name="save_hosts"/>
+    <Action name="saveas_hosts"/>
+    <Action name="scan_hosts"/>
+  </Menu>
+  <Menu name="plugins"><text>&amp;Plugins</text>
+    <Action name="open_plugins"/>
+    <Action name="save_plugins"/>
+    <Action name="saveas_plugins"/>
+    <Action name="add_plugins"/>
+  </Menu>
+</MenuBar>
+</kpartgui>
