@@ -1,0 +1,424 @@
+<?php
+/*
+ * Created on 13 juin 08
+ *
+ * To change the template for this generated file go to
+ * Window - Preferences - PHPeclipse - PHP - Code Templates
+ */
+
+ include 'conf.php';
+
+ 
+ function myaddslashes($string)
+ {
+ 	if (get_magic_quotes_gpc()) return $string; 
+ 	
+ 	return addslashes($string);
+ }
+
+ function mystripslashes($string)
+ {
+ 	if (get_magic_quotes_gpc()) return $string; 
+ 	
+ 	return stripslashes($string);
+ }
+
+ //Encode une partie de l'URL, par exemple les espace devienne +
+ function encodeQuery($url)
+ {
+
+	$data = parse_url($url);
+	if (!isset($data['query'])) return $url;
+
+	$path = $data['path'];
+	return $data['scheme'].'://'.$data['host'].$data['path'].'?'.urlencode($data['query']);
+ }
+ 
+ // source http://snippets.dzone.com/posts/show/187
+ function canonical_path($path) {
+    $canonical = preg_replace('|/\.?(?=/)|','',$path);
+    while (($collapsed = preg_replace('|/[^/]+/\.\./|','/',$canonical,1)) !== $canonical) {
+        $canonical = $collapsed;
+    }
+    $canonical = preg_replace('|^/\.\./|','/',$canonical);
+    return $canonical;
+}
+ 
+ // Transforme une URL potentielement relative en absolue
+ function absoluteURL($base,$url)
+ {
+	$base = urlWithoutFile($base);
+
+	$url_info = parse_url(trim($url));
+	// Url Relative
+	if (!isset($url_info['host'])) {
+		$url = $base.$url;	
+	}
+	$result = canonical_path($url);
+	
+	//bricolo, contourne le bug de canonical_path
+	$result = str_ireplace('http:/','http://',$result); 
+	$result = str_ireplace('https:/','https://',$result); 
+	return $result;
+ }
+ 
+// Recupere le contenu du page web
+function getHtmlDocument($url)
+{
+    $doc = array();
+    
+    $c = curl_init(encodeQuery($url));
+    curl_setopt($c, CURLOPT_TIMEOUT, 60);
+    curl_setopt($c, CURLOPT_CONNECTTIMEOUT, 20);
+    curl_setopt($c, CURLOPT_RETURNTRANSFER, TRUE);
+    curl_setopt($c,CURLOPT_HEADER,TRUE);
+
+    $data = curl_exec($c);
+    
+	if ($data) { 
+		// Http code
+		$doc['http_code'] = curl_getinfo($c, CURLINFO_HTTP_CODE);    
+	    
+	    // Header
+		$doc['header'] = "";
+	    if (preg_match('/([A-Za-z0-9]+:.*)\r\n\r\n/sm',$data,$match)) {
+			$doc['header'] = $match[1];
+	    }
+	    
+	    // Html code
+		$doc['html'] = "";
+	    if (preg_match('/\r\n\r\n(.*)/sm',$data,$match)) {
+			$doc['html'] = $match[1];
+	    }
+		
+		// Title
+		$doc['title'] = "";
+		if (preg_match("#<title>(.*?)<\/title>#si", $doc['html'], $match)) {
+			$doc['title'] = trim($match[1]);
+		}
+	}
+
+    curl_close($c);
+    
+
+    return $doc;
+}
+
+// Epure le document HTML (suppression du style, javascript, etc ..)
+function cleanDocument($url,$content)
+{
+	$url_info = parse_url($url);
+	$host = $url_info['host'];
+	$path = '';
+	if (isset($url_info['path'])) {
+		$path = $url_info['path'];
+	}
+
+	// Nettoyage
+	$content = preg_replace("/&nbsp;/", " ", $content);
+	
+	// Supprime les donn�es inutile 
+	$content = preg_replace("#<!--.*?-->#si", "",$content);	
+	$content = preg_replace("#<script.*?>.*?</script>#si", "",$content);
+	$content = preg_replace("#<style.*?>.*?</style>#si", "",$content);
+
+	return $content;
+}
+function getOnlyTagContent($tag,$content)
+{
+	$result='';
+	if (preg_match_all("#<[^>]*".$tag."[^>]*>(.*?)</[^>]*".$tag."[^>]*>#si",$content,$match)) {
+		$result = $match[1];
+	}
+	
+	// Retourne l'ensemble des mots clef dans des $tag
+	$result = implode(" ",$match[1]);
+	return$result;
+}
+
+function cleanWordString($text)
+{
+	$text = strtolower($text);
+	$text = preg_replace("/[^[:alnum:]-]+/i", " ",$text); 
+	
+	var_dump($text);exit;
+	return $text;
+}
+
+
+function removeTagContent($tag,$content)
+{
+	$result='';
+	$content = preg_replace("#(< *$tag *>.*?</ *$tag *>)#si",'',$content);
+	
+	return $content; 
+}
+
+// Source http://www.comscripts.com/sources/php.remove-accents.4.html
+function removeSpecialChar($string)
+{ 
+    $string= strtr($string,$iso_8859_1,   
+    "aaaaaaaaaaaaooooooooooooeeeeeeeecciiiiiiiiuuuuuuuuynn");
+    
+    $string = str_replace('&apos;',"'",$string); 
+   
+   return $string;
+} 
+
+
+// R�cupere quelques information concernant la page
+function getInfoHTMLPage($url,$content)
+{
+	$metadata = array();
+	
+	// Recupere les infos de l'URL
+	$url_info = parse_url($url);
+	$metadata['scheme'] = '';
+	$metadata['host'] = '';
+	$metadata['path'] = '';
+	$metadata['query'] = '';
+	$metadata['title'] = '';
+	$metadata['keywords'] = '';
+	$metadata['description'] = '';
+	$metadata['base'] = '';
+	$metadata['robot'] = '';
+
+	if (isset($url_info['scheme'])) $metadata['scheme'] = $url_info['scheme'];
+	if (isset($url_info['host'])) $metadata['host'] = $url_info['host'];
+	if (isset($url_info['path'])) $metadata['path'] = $url_info['path'];
+	if (isset($url_info['query'])) $metadata['query'] = $url_info['query'];
+
+
+	$content =  cleanDocument($url,$content);
+	// Titre
+	if (preg_match('#<title>(.*?)</title>#si', $content,$match )) {
+		$result = trim($match[1]);	
+		$metadata['title'] = $result;
+	}
+	
+	// Keywords
+	if (preg_match('#<meta +name *=[\"\']?keywords[\"\']?.*?content=[\"\']?([^<>\'\"]+)[\"\']?#si', $content,$match )) {
+		$result = trim($match[1]);	
+		$metadata['keywords'] = $result;
+	}
+	
+
+	// Description
+	if (preg_match('#<meta +name *=[\"\']?description[\"\']?.*?content=[\"\']?([^<>\'\"]+)[\"\']?#si', $content,$match )) {
+		$result = trim($match[1]);	
+		$metadata['description'] = $result;
+	}
+
+	// BASE
+	if (preg_match('#<base +href *= *[\"\']?([^<>\'\"]+)[\"\']?#si', $content,$match )) {
+		$result = trim($match[1]);	
+		$metadata['base'] = $result;
+	}
+
+	// Robots
+	if (preg_match('#<meta +name *=[\"\']?robots[\"\']?.*?content=[\"\']?([^<>\'\"]+)[\"\']?#si', $content,$match )) {
+		$result = trim($match[1]);	
+		$metadata['robot'] = $result;
+	}
+
+	// Recherche dans les tags	
+	foreach ($GLOBALS['weight_intags'] as $key => $value) {
+		$metadata[$key] = strip_tags(getOnlyTagContent($key,$content));
+	}
+
+	// Supprime les mots pr�c�dament trouv� dans les tags
+	foreach ($GLOBALS['weight_intags'] as $key => $value) {
+			$content = removeTagContent($key,$content);
+	}
+	
+	$metadata['words'] = removeSpecialChar(strip_tags($content));
+	
+	return $metadata;
+}
+
+
+/*function extractURLDomainFrom($url)
+{
+	$url_info = parse_url($url);
+
+	return $url_info['scheme'].'://'.$url_info['host'];
+}
+
+
+function extractDomainWithPortFromURL($url)
+{
+	$url_info = parse_url($url);
+
+	if (!isset($url_info['port']) || (isset($url_info['port']) && $url_info['port']!=80)) {
+		$port = "";
+	} else {
+		$port = ":".$url_info['port'];
+	}
+
+	return extractURLDomainFrom($url).$port;
+}
+
+function extractPathFromURL($url)
+{
+	$url_info = parse_url($url);
+	$path = $url_info['path'];
+
+	$pos = strrpos($path,'/');
+	$path = substr($path,1,$pos);
+	print "POSI $pos $path";exit;
+
+
+	// URL /test.php OR /test.php?test/toto
+	preg_match('#^(/[^\?\/]+)+/#',$path,$match);
+	
+	return extractDomainWithPortFromURL($url).$path;
+}
+*/
+
+// Retour l'url sans le nom du fichier
+function urlWithoutFile($url)
+{
+	$pos = strrpos($url,'/');
+	$url = substr($url,0,$pos+1);
+
+	return $url;
+}
+ 
+
+// Supprime le dernier message d'erreur
+function noError()
+{
+	@trigger_error("");	
+}
+
+// Test si il y'a une erreur'
+function isError()
+{
+	$error = error_get_last();
+	return $error["message"]!="";
+}
+
+// Afficha la derniere erreur
+function showError()
+{
+	if (isError()) {
+		print "<b>error</b></br>";
+		var_dump(error_get_last());
+	}
+}
+
+
+// Afficha un message et libere le buffer
+function showInformation($text) 
+{
+	print "$text";
+	flush();
+    ob_flush();
+}
+
+
+
+// Extrait les URLs contenu dans un document HTML
+function extract_links($src_url,$content)
+{
+	$links = array();
+	
+	// Nettoie le document et r�cupere les URLs
+	$base = urlWithoutFile($src_url);
+	$content = cleanDocument($base,$content);
+	preg_match_all("#href=[\"\'](.*?)[\"\']#i", $content, $urls, PREG_SET_ORDER);
+	
+	foreach ($urls as $url) {
+		// On convertir l'URL en absolu et on teste sans l'hote si on as mailto, etc ..'
+		$url = absoluteURL($base,$url[1]);
+		$tmpurl = trim(str_replace($base,"",$url));
+		
+		// On prend seulement les URLs ne contenant les scheme suivant
+		if (!preg_match('#^(mailto|javascript|news|ftp):.*#si',$tmpurl)) {
+			// Suprime les anchors
+			if (preg_match('|#[^/]+$|',$url)) {
+				$url = preg_replace('|(#[^/]+)$|','',$url);
+			}
+
+/*			if (!(stripos($tmpurl,'mailto')===false)) {
+				print "on veux pas ajouter '$base $tmpurl'";
+				exit;
+			}*/
+
+			
+			// On verifie et ajoute les URLs
+			if (!isset($links[$url]) ) {
+					$links[$url] = 1;
+			} else {
+				$links[$url] = $links[$url]+1;
+			}
+		}
+		
+
+/*		if (!(stripos($tmpurl,'mailto')===false)) {
+			preg_match('#^(mailto|javascript|news|ftp):.*#si',$tmpurl,$match);
+			print "# FIN '$tmpurl' #";
+			exit; 
+		}*/
+		 
+	}
+	
+	return $links;
+}
+
+function extract_words($src_url,$content)
+{
+	$content = cleanDocument($src_url,$content);
+	$data = getInfoHTMLPage($src_url,$content);
+	print "extract_words";
+	var_dump($data);
+	exit;
+	
+	$links = array();
+	
+	// Nettoie le document et r�cupere les URLs
+	$base = urlWithoutFile($src_url);
+	$content = cleanDocument($base,$content);
+	preg_match_all("#href=[\"\'](.*?)[\"\']#i", $content, $urls, PREG_SET_ORDER);
+	
+	foreach ($urls as $url) {
+		// On convertir l'URL en absolu et on teste sans l'hote si on as mailto, etc ..'
+		$url = absoluteURL($base,$url[1]);
+		$tmpurl = trim(str_replace($base,"",$url));
+		
+		// On prend seulement les URLs ne contenant les scheme suivant
+		if (!preg_match('#^(mailto|javascript|news|ftp):.*#si',$tmpurl)) {
+			// Suprime les anchors
+			if (preg_match('|#[^/]+$|',$url)) {
+				$url = preg_replace('|(#[^/]+)$|','',$url);
+			}
+
+/*			if (!(stripos($tmpurl,'mailto')===false)) {
+				print "on veux pas ajouter '$base $tmpurl'";
+				exit;
+			}*/
+
+			
+			// On verifie et ajoute les URLs
+			if (!isset($links[$url]) ) {
+					$links[$url] = 1;
+			} else {
+				$links[$url] = $links[$url]+1;
+			}
+		}
+		
+
+/*		if (!(stripos($tmpurl,'mailto')===false)) {
+			preg_match('#^(mailto|javascript|news|ftp):.*#si',$tmpurl,$match);
+			print "# FIN '$tmpurl' #";
+			exit; 
+		}*/
+		 
+	}
+	
+	return $links;
+}
+
+
+ 
+?>

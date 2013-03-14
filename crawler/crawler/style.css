@@ -1,0 +1,18 @@
+				
+html {margin:0;border:0;padding:0;}
+body {font-family:verdana;margin:0;padding:10px 0 0 0;background:#FFFFFF text-align:center;}
+h1 {display:none;}
+h2 {font-size:0.7em;color:#666;padding:0 0 10px 0;margin:20px auto 15px auto;border-bottom:1px solid #444;text-align:center;}
+ul {margin:0;border:0;padding:0 0 30px 0;}
+li {margin:0;border:0;padding:0;text-align:left;color:#999;}
+
+a:link {text-decoration:none;}
+a:visited {text-decoration:none;}
+a:hover {text-decoration:none;}
+a:active {text-decoration:none;}
+		
+.page {width:360px;margin:30px auto 0 auto;text-align:center;}
+.page p {padding:8px 20px 8px 20px;margin:0;;text-align:left;}
+
+ul li {font-family:verdana;font-size:0.7em;padding:10px 3px 10px 3px;margin:0;display:inline;list-style-type:none;}
+
